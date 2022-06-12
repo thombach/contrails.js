@@ -7,6 +7,7 @@ import params from "./contrails.json" assert { type: "json" };
 
 const TO_RADIANS = Math.PI / 180;
 const fps = params['fps'];
+const canvasOffset = params['canvas_offset'];
 
 const contrails = document.getElementById("contrails");
 contrails.style.width = "100%";
@@ -19,6 +20,8 @@ var canvas = document.createElement("canvas");
 canvas.width = size.width;
 canvas.height = size.height;
 contrails.appendChild(canvas);
+
+/* Init context */
 const ctx = canvas.getContext("2d");
 
 /* Init plane image */
@@ -34,8 +37,29 @@ class Plane {
   }
 
   move() {
+    // West overflow
+    if(-canvasOffset > this.pos.x) {
+      this.pos.x = canvas.width + canvasOffset;
+    }
+    // North overflow
+    else if(-canvasOffset > this.pos.y) {
+      this.pos.y = canvas.height + canvasOffset;
+    }
+    // East overflow
+    else if(canvasOffset + canvas.width < this.pos.x) {
+      this.pos.x = -canvasOffset;
+    }
+    // South overflow
+    else if(canvasOffset + canvas.height < this.pos.y) {
+      this.pos.y = -canvasOffset;
+    }
     this.pos.x += Math.cos(this.angle * TO_RADIANS) * this.speed;
     this.pos.y += Math.sin(this.angle * TO_RADIANS) * this.speed;
+  }
+
+  ajust() {
+    if (-canvasOffset > this.pos.x)
+    return -canvasOffset > this.pos.x || -canvasOffset > this.pos.y || canvasOffset < this. pos.x || canvasOffset < this.pos.y;
   }
 
   draw() {
