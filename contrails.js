@@ -5,6 +5,8 @@
 
 import params from "./contrails.json" assert { type: "json" };
 
+const TO_RADIANS = Math.PI / 180;
+
 const contrails = document.getElementById("contrails");
 contrails.style.width = "100%";
 contrails.style.height = "100%";
@@ -23,20 +25,30 @@ var planeImg = new Image();
 planeImg.src = params["img_path"];
 
 class Plane {
-  constructor(position, speed, direction, size) {
+  constructor(position, speed, size, angle) {
     this.pos = position;
     this.speed = speed;
-    this.dir = direction;
     this.size = size;
+    this.angle = angle;
   }
 
   move() {
-    this.pos.x += this.dir.x * this.speed;
-    this.pos.y += this.dir.y * this.speed;
+    this.pos.x += Math.cos(this.angle * TO_RADIANS) * this.speed;
+    this.pos.y += Math.sin(this.angle * TO_RADIANS) * this.speed;
   }
 
   draw() {
-    ctx.drawImage(planeImg, this.pos.x, this.pos.y, this.size, this.size);
+    ctx.save();
+    ctx.translate(this.pos.x, this.pos.y);
+    ctx.rotate(this.angle * TO_RADIANS);
+    ctx.drawImage(
+      planeImg,
+      -(this.size / 2),
+      -(this.size / 2),
+      this.size,
+      this.size
+    );
+    ctx.restore();
   }
 
   update() {
@@ -45,23 +57,39 @@ class Plane {
   }
 }
 
-function createPlane() {
-  let position = {
-    x: Math.random() * canvas.width,
-    y: Math.random() * canvas.height,
-  };
-  let direction = { x: 1, y: 0 };
-  let speed = params["planes"]["speed"];
-  let size = params["planes"]["size"];
-  return new Plane(position, speed, direction, size);
+class PlaneManager {
+  constructor(number) {
+    this.number = number;
+    this.planes = [];
+    for (let index = 0; index < this.number; index++) {
+      this.createPlane();
+    }
+  }
+
+  createPlane() {
+    let position = {
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+    };
+    let speed = params["planes"]["speed"];
+    let size = params["planes"]["size"];
+    let angle = Math.random() * 360;
+    this.planes.push(new Plane(position, speed, size, angle));
+  }
+
+  update() {
+    this.planes.forEach((plane) => {
+      plane.update();
+    });
+  }
 }
 
-var plane = createPlane();
+var pm = new PlaneManager(params["planes"]["number"]);
 
 function animate() {
   window.requestAnimationFrame(animate);
   ctx.clearRect(0, 0, canvas.width, canvas.height);
-  plane.update();
+  pm.update();
 }
 
 animate();

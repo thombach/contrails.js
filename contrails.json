@@ -1,7 +1,8 @@
 {
     "img_path": "./assets/airplane.png",
     "planes": {
-        "speed": 0.5,
-        "size": 30
+        "speed": 1,
+        "size": 50,
+        "number": 3
     }
 }
