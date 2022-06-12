@@ -1,0 +1,7 @@
+{
+    "img_path": "./assets/airplane.png",
+    "planes": {
+        "speed": 0.5,
+        "size": 30
+    }
+}
