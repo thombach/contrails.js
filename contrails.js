@@ -6,6 +6,7 @@
 import params from "./contrails.json" assert { type: "json" };
 
 const TO_RADIANS = Math.PI / 180;
+const fps = params['fps'];
 
 const contrails = document.getElementById("contrails");
 contrails.style.width = "100%";
@@ -87,9 +88,11 @@ class PlaneManager {
 var pm = new PlaneManager(params["planes"]["number"]);
 
 function animate() {
-  window.requestAnimationFrame(animate);
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
-  pm.update();
+  setTimeout(function () {
+    window.requestAnimationFrame(animate);
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    pm.update();
+  }, 1000 / fps);
 }
 
 animate();
