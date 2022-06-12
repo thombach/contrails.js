@@ -5,6 +5,12 @@
         "size": 20,
         "number": 3
     },
+    "particles": {
+        "size": 20,
+        "lifespan": 10000,
+        "number": 20,
+        "color": "#FF0000"
+    },
     "fps": 60,
     "canvas_offset": 50
 }
