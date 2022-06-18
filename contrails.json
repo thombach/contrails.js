@@ -3,7 +3,9 @@
     "planes": {
         "speed": 2,
         "size": 20,
-        "number": 10
+        "number": 3,
+        "double_contrails": true,
+        "contrails_spacing": 0.2
     },
     "particles": {
         "size": 0.5,

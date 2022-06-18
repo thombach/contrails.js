@@ -76,14 +76,30 @@ class Plane {
     this.speed = params.planes.speed;
     this.size = params.planes.size;
     this.angle = angle;
-    this.contrail = [];
+    this.contrail1 = [];
+    this.contrail2 = [];
+    this.contrailSpacing = params.planes.contrails_spacing;
 
     // Particles spawn point will be behind the plane
     let oppositeAngle = ((angle + 180) % 360) * TO_RADIANS;
-    this.contrailPos = {
-      x: (this.size / 2) * Math.cos(oppositeAngle),
-      y: (this.size / 2) * Math.sin(oppositeAngle),
-    };
+    if(!params.planes.double_contrails) {
+      this.contrail1Pos = {
+        x: (this.size / 2) * Math.cos(oppositeAngle),
+        y: (this.size / 2) * Math.sin(oppositeAngle),
+      };
+      this.contrail2Pos = null;
+    }
+    else {
+      this.contrail1Pos = {
+        x: (this.size / 2) * Math.cos(oppositeAngle + this.contrailSpacing),
+        y: (this.size / 2) * Math.sin(oppositeAngle + this.contrailSpacing),
+      };
+      this.contrail2Pos = {
+        x: (this.size / 2) * Math.cos(oppositeAngle - this.contrailSpacing),
+        y: (this.size / 2) * Math.sin(oppositeAngle - this.contrailSpacing),
+      };
+    }
+    
   }
 
   move() {
@@ -121,24 +137,32 @@ class Plane {
     ctx.restore();
   }
 
-  update() {
-    this.move();
-    this.draw();
-
-    if (this.contrail.length < maxParticleNum) {
-      this.contrail.push(
+  updateContrail(contrail, contrailPos) {
+    if(contrailPos == null) {
+      return;
+    }
+    if (contrail.length < maxParticleNum) {
+      contrail.push(
         new Particle({
-          x: this.pos.x + this.contrailPos.x,
-          y: this.pos.y + this.contrailPos.y,
+          x: this.pos.x + contrailPos.x,
+          y: this.pos.y + contrailPos.y,
         })
       );
     }
-    this.contrail.forEach((particle, index) => {
+    contrail.forEach((particle, index) => {
       particle.update();
       if (particle.life <= 0) {
-        this.contrail.splice(index, 1);
+        contrail.splice(index, 1);
       }
     });
+
+  }
+
+  update() {
+    this.move();
+    this.draw();
+    this.updateContrail(this.contrail1, this.contrail1Pos);
+    this.updateContrail(this.contrail2, this.contrail2Pos);   
   }
 }
 
