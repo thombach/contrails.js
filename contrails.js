@@ -33,7 +33,7 @@ planeImg.src = params.img_path;
 
 class Particle {
   constructor(position) {
-    this.position = position;
+    this.pos = position;
     this.size = params.particles.size;
     this.lifespan = params.particles.lifespan;
     this.life = this.lifespan;
@@ -46,7 +46,7 @@ class Particle {
     ctx.fillStyle = params.particles.color;
     ctx.globalAlpha = this.opacity;
     ctx.beginPath();
-    ctx.arc(this.position.x, this.position.y, this.size, 0, 2 * Math.PI);
+    ctx.arc(this.pos.x, this.pos.y, this.size, 0, 2 * Math.PI);
     ctx.fill();
     ctx.restore();
   }
@@ -110,7 +110,7 @@ class Plane {
     this.draw();
 
     if (this.contrail.length < maxParticleNum) {
-      this.contrail.push(new Particle(this.position));
+      this.contrail.push(new Particle({...this.pos}));
     }
     this.contrail.forEach((particle, index) => {
       particle.update();

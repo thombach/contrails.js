@@ -1,14 +1,14 @@
 {
     "img_path": "./assets/airplane.png",
     "planes": {
-        "speed": 1,
+        "speed": 2,
         "size": 20,
-        "number": 3
+        "number": 10
     },
     "particles": {
-        "size": 20,
-        "lifespan": 10000,
-        "number": 20,
+        "size": 0.5,
+        "lifespan": 150,
+        "number": 200,
         "color": "#FF0000"
     },
     "fps": 60,
