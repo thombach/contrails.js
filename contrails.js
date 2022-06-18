@@ -12,6 +12,8 @@ const fps = params.fps;
 const canvasOffset = params.canvas_offset;
 const maxParticleNum = params.particles.number;
 
+document.body.style.backgroundColor = params.background_color;
+
 const contrails = document.getElementById("contrails");
 contrails.style.width = "100%";
 contrails.style.height = "100%";
@@ -51,16 +53,17 @@ class Particle {
     ctx.restore();
   }
 
-  move() {
-    const offset = Math.random();
+  moveAndGrow(offset) {
     this.pos.x += offset;
     this.pos.y += offset;
+    this.size += offset*0.2;
   }
 
   update() {
     if (this.life > 0) {
-      if (Math.random() < params.particles.move_probability) {
-        this.move();
+      let r = Math.random();
+      if (r < params.particles.move_probability) {
+        this.moveAndGrow(r);
       }
       this.draw();
       this.life--;

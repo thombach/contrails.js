@@ -1,8 +1,9 @@
 {
     "img_path": "./assets/airplane.png",
+    "background_color": "#87CEEB",
     "planes": {
         "speed": 2,
-        "size": 20,
+        "size": 25,
         "number": 3,
         "double_contrails": true,
         "contrails_spacing": 0.2
@@ -11,8 +12,8 @@
         "size": 0.5,
         "lifespan": 150,
         "number": 200,
-        "color": "#FF0000",
-        "move_probability": 0.05
+        "color": "#FFFFFF",
+        "move_probability": 0.4
     },
     "fps": 60,
     "canvas_offset": 50
