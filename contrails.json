@@ -9,7 +9,8 @@
         "size": 0.5,
         "lifespan": 150,
         "number": 200,
-        "color": "#FF0000"
+        "color": "#FF0000",
+        "move_probability": 0.05
     },
     "fps": 60,
     "canvas_offset": 50

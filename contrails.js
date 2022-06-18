@@ -51,8 +51,17 @@ class Particle {
     ctx.restore();
   }
 
+  move() {
+    const offset = Math.random();
+    this.pos.x += offset;
+    this.pos.y += offset;
+  }
+
   update() {
-    if(this.life > 0){
+    if (this.life > 0) {
+      if (Math.random() < params.particles.move_probability) {
+        this.move();
+      }
       this.draw();
       this.life--;
       this.opacity = this.life / this.lifespan;
@@ -67,26 +76,31 @@ class Plane {
     this.speed = params.planes.speed;
     this.size = params.planes.size;
     this.angle = angle;
-    let oppositeAngle = ((angle + 180) % 360) * TO_RADIANS;
-    this.contrailPos = { x: this.size/2 * Math.cos(oppositeAngle), y: this.size/2 * Math.sin(oppositeAngle)};
     this.contrail = [];
+
+    // Particles spawn point will be behind the plane
+    let oppositeAngle = ((angle + 180) % 360) * TO_RADIANS;
+    this.contrailPos = {
+      x: (this.size / 2) * Math.cos(oppositeAngle),
+      y: (this.size / 2) * Math.sin(oppositeAngle),
+    };
   }
 
   move() {
     // West overflow
-    if(-canvasOffset > this.pos.x) {
+    if (-canvasOffset > this.pos.x) {
       this.pos.x = canvas.width + canvasOffset;
     }
     // North overflow
-    else if(-canvasOffset > this.pos.y) {
+    else if (-canvasOffset > this.pos.y) {
       this.pos.y = canvas.height + canvasOffset;
     }
     // East overflow
-    else if(canvasOffset + canvas.width < this.pos.x) {
+    else if (canvasOffset + canvas.width < this.pos.x) {
       this.pos.x = -canvasOffset;
     }
     // South overflow
-    else if(canvasOffset + canvas.height < this.pos.y) {
+    else if (canvasOffset + canvas.height < this.pos.y) {
       this.pos.y = -canvasOffset;
     }
     this.pos.x += Math.cos(this.angle * TO_RADIANS) * this.speed;
@@ -112,14 +126,19 @@ class Plane {
     this.draw();
 
     if (this.contrail.length < maxParticleNum) {
-      this.contrail.push(new Particle({ x: this.pos.x + this.contrailPos.x, y: this.pos.y + this.contrailPos.y}));
+      this.contrail.push(
+        new Particle({
+          x: this.pos.x + this.contrailPos.x,
+          y: this.pos.y + this.contrailPos.y,
+        })
+      );
     }
     this.contrail.forEach((particle, index) => {
       particle.update();
-      if(particle.life <= 0){
+      if (particle.life <= 0) {
         this.contrail.splice(index, 1);
       }
-    })
+    });
   }
 }
 
