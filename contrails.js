@@ -67,6 +67,8 @@ class Plane {
     this.speed = params.planes.speed;
     this.size = params.planes.size;
     this.angle = angle;
+    let oppositeAngle = ((angle + 180) % 360) * TO_RADIANS;
+    this.contrailPos = { x: this.size/2 * Math.cos(oppositeAngle), y: this.size/2 * Math.sin(oppositeAngle)};
     this.contrail = [];
   }
 
@@ -110,7 +112,7 @@ class Plane {
     this.draw();
 
     if (this.contrail.length < maxParticleNum) {
-      this.contrail.push(new Particle({...this.pos}));
+      this.contrail.push(new Particle({ x: this.pos.x + this.contrailPos.x, y: this.pos.y + this.contrailPos.y}));
     }
     this.contrail.forEach((particle, index) => {
       particle.update();
