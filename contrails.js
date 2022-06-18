@@ -129,7 +129,7 @@ class Plane {
   draw() {
     ctx.save();
     ctx.translate(this.pos.x, this.pos.y);
-    ctx.rotate(this.angle * TO_RADIANS);
+    ctx.rotate((this.angle + params.img_angle) * TO_RADIANS);
     ctx.drawImage(
       planeImg,
       -(this.size / 2),
