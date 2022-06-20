@@ -3,7 +3,7 @@
     "img_angle": 90,
     "background_color": "#87CEEB",
     "planes": {
-        "speed": 1,
+        "speed": 3,
         "size": 20,
         "number": 3,
         "double_contrails": true,
